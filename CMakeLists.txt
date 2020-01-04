@@ -25,5 +25,3 @@ target_link_libraries(test gtest_main)
 # Add project executable
 add_executable(traffic_simulation ${SOURCES})
 target_link_libraries(traffic_simulation ${OpenCV_LIBRARIES})
-
-

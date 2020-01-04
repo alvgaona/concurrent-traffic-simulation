@@ -9,3 +9,6 @@ build/
 bin/
 cmake-build-debug/
 lib/
+
+# macOS
+.DS_Store
