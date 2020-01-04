@@ -6,34 +6,34 @@
 
 Vehicle::Vehicle()
 {
-    _currStreet = nullptr;
-    _posStreet = 0.0;
-    _type = ObjectType::objectVehicle;
-    _speed = 400; // m/s
+    current_street_ = nullptr;
+    position_street_ = 0.0;
+    type_ = ObjectType::kObjectVehicle;
+    speed_ = 400; // m/s
 }
 
 
-void Vehicle::setCurrentDestination(std::shared_ptr<Intersection> destination)
+void Vehicle::set_current_destination(std::shared_ptr<Intersection> destination)
 {
     // update destination
-    _currDestination = destination;
+    current_destination_ = destination;
 
     // reset simulation parameters
-    _posStreet = 0.0;
+    position_street_ = 0.0;
 }
 
 void Vehicle::simulate()
 {
     // launch drive function in a thread
-    threads.emplace_back(std::thread(&Vehicle::drive, this));
+    threads_.emplace_back(std::thread(&Vehicle::drive, this));
 }
 
 // virtual function which is executed in a thread
 void Vehicle::drive()
 {
     // print id of the current thread
-    std::unique_lock<std::mutex> lck(_mtx);
-    std::cout << "Vehicle #" << _id << "::drive: thread id = " << std::this_thread::get_id() << std::endl;
+    std::unique_lock<std::mutex> lck(mutex_);
+    std::cout << "Vehicle #" << id_ << "::drive: thread id = " << std::this_thread::get_id() << std::endl;
     lck.unlock();
 
     // initalize variables
@@ -53,45 +53,45 @@ void Vehicle::drive()
         if (timeSinceLastUpdate >= cycleDuration)
         {
             // update position with a constant velocity motion model
-            _posStreet += _speed * timeSinceLastUpdate / 1000;
+            position_street_ += speed_ * timeSinceLastUpdate / 1000;
 
             // compute completion rate of current street
-            double completion = _posStreet / _currStreet->getLength();
+            double completion = position_street_ / current_street_->get_length();
 
             // compute current pixel position on street based on driving direction
             std::shared_ptr<Intersection> i1, i2;
-            i2 = _currDestination;
-            i1 = i2->getID() == _currStreet->getInIntersection()->getID() ? _currStreet->getOutIntersection() : _currStreet->getInIntersection();
+            i2 = current_destination_;
+            i1 = i2->get_id() == current_street_->get_in_intersection()->get_id() ? current_street_->get_out_intersection() : current_street_->get_in_intersection();
 
             double x1, y1, x2, y2, xv, yv, dx, dy, l;
-            i1->getPosition(x1, y1);
-            i2->getPosition(x2, y2);
+            i1->get_position(x1, y1);
+            i2->get_position(x2, y2);
             dx = x2 - x1;
             dy = y2 - y1;
             l = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (x1 - x2));
             xv = x1 + completion * dx; // new position based on line equation in parameter form
             yv = y1 + completion * dy;
-            this->setPosition(xv, yv);
+            this->set_position(xv, yv);
 
             // check wether halting position in front of destination has been reached
             if (completion >= 0.9 && !hasEnteredIntersection)
             {
                 // request entry to the current intersection (using async)
-                auto ftrEntryGranted = std::async(&Intersection::addVehicleToQueue, _currDestination, get_shared_this());
+                auto ftrEntryGranted = std::async(&Intersection::add_vehicles_to_queue, current_destination_, get_shared_this());
 
                 // wait until entry has been granted
                 ftrEntryGranted.get();
 
                 // slow down and set intersection flag
-                _speed /= 10.0;
+                speed_ /= 10.0;
                 hasEnteredIntersection = true;
             }
 
-            // check wether intersection has been crossed
+            // check whether intersection has been crossed
             if (completion >= 1.0 && hasEnteredIntersection)
             {
                 // choose next street and destination
-                std::vector<std::shared_ptr<Street>> streetOptions = _currDestination->queryStreets(_currStreet);
+                std::vector<std::shared_ptr<Street>> streetOptions = current_destination_->query_streets(current_street_);
                 std::shared_ptr<Street> nextStreet;
                 if (streetOptions.size() > 0)
                 {
@@ -104,21 +104,21 @@ void Vehicle::drive()
                 else
                 {
                     // this street is a dead-end, so drive back the same way
-                    nextStreet = _currStreet;
+                    nextStreet = current_street_;
                 }
                 
                 // pick the one intersection at which the vehicle is currently not
-                std::shared_ptr<Intersection> nextIntersection = nextStreet->getInIntersection()->getID() == _currDestination->getID() ? nextStreet->getOutIntersection() : nextStreet->getInIntersection(); 
+                std::shared_ptr<Intersection> nextIntersection = nextStreet->get_in_intersection()->get_id() == current_destination_->get_id() ? nextStreet->get_out_intersection() : nextStreet->get_in_intersection();
 
                 // send signal to intersection that vehicle has left the intersection
-                _currDestination->vehicleHasLeft(get_shared_this());
+                current_destination_->vehicle_has_left(get_shared_this());
 
                 // assign new street and destination
-                this->setCurrentDestination(nextIntersection);
-                this->setCurrentStreet(nextStreet);
+                this->set_current_destination(nextIntersection);
+                this->set_current_street(nextStreet);
 
                 // reset speed and intersection flag
-                _speed *= 10.0;
+                speed_ *= 10.0;
                 hasEnteredIntersection = false;
             }
 

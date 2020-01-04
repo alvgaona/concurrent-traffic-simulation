@@ -14,11 +14,11 @@ public:
     Vehicle();
 
     // getters / setters
-    void setCurrentStreet(std::shared_ptr<Street> street) { _currStreet = street; };
-    void setCurrentDestination(std::shared_ptr<Intersection> destination);
+    void set_current_street(std::shared_ptr<Street> street) { current_street_ = street; };
+    void set_current_destination(std::shared_ptr<Intersection> destination);
 
     // typical behaviour methods
-    void simulate();
+    void simulate() override;
 
     // miscellaneous
     std::shared_ptr<Vehicle> get_shared_this() { return shared_from_this(); }
@@ -27,10 +27,10 @@ private:
     // typical behaviour methods
     void drive();
 
-    std::shared_ptr<Street> _currStreet;            // street on which the vehicle is currently on
-    std::shared_ptr<Intersection> _currDestination; // destination to which the vehicle is currently driving
-    double _posStreet;                              // position on current street
-    double _speed;                                  // ego speed in m/s
+    std::shared_ptr<Street> current_street_;            // street on which the vehicle is currently on
+    std::shared_ptr<Intersection> current_destination_; // destination to which the vehicle is currently driving
+    double position_street_;                              // position on current street
+    double speed_;                                  // ego speed in m/s
 };
 
 #endif

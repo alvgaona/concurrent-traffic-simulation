@@ -4,32 +4,32 @@
 #include <iostream>
 
 // init static variable
-int TrafficObject::_idCnt = 0;
+int TrafficObject::id_count_ = 0;
 
-std::mutex TrafficObject::_mtx;
+std::mutex TrafficObject::mutex_;
 
-void TrafficObject::setPosition(double x, double y)
+void TrafficObject::set_position(double x, double y)
 {
-    _posX = x;
-    _posY = y;
+    pos_x_ = x;
+    post_y_ = y;
 }
 
-void TrafficObject::getPosition(double &x, double &y)
+void TrafficObject::get_position(double &x, double &y)
 {
-    x = _posX;
-    y = _posY;
+    x = pos_x_;
+    y = post_y_;
 }
 
 TrafficObject::TrafficObject()
 {
-    _type = ObjectType::noObject;
-    _id = _idCnt++;
+    type_ = ObjectType::kNoObject;
+    id_ = id_count_++;
 }
 
 TrafficObject::~TrafficObject()
 {
     // set up thread barrier before this object is destroyed
-    std::for_each(threads.begin(), threads.end(), [](std::thread &t) {
+    std::for_each(threads_.begin(), threads_.end(), [](std::thread &t) {
         t.join();
     });
 }

@@ -12,22 +12,23 @@ public:
     // constructor / desctructor
 
     // getters / setters
-    void setBgFilename(std::string filename) { _bgFilename = filename; }
-    void setTrafficObjects(std::vector<std::shared_ptr<TrafficObject>> &trafficObjects) { _trafficObjects = trafficObjects; };
+    void set_bg_file_name(std::string filename) { bg_filename_ = filename; }
+    void set_traffic_objects(
+        std::vector<std::shared_ptr<TrafficObject>> &traffic_objects) { traffic_objects_ = traffic_objects; };
 
     // typical behaviour methods
     void simulate();
 
 private:
     // typical behaviour methods
-    void loadBackgroundImg();
-    void drawTrafficObjects();
+    void load_background_img();
+    void draw_traffic_objects();
 
     // member variables
-    std::vector<std::shared_ptr<TrafficObject>> _trafficObjects;
-    std::string _bgFilename;
-    std::string _windowName;
-    std::vector<cv::Mat> _images;
+    std::vector<std::shared_ptr<TrafficObject>> traffic_objects_;
+    std::string bg_filename_;
+    std::string window_name_;
+    std::vector<cv::Mat> images_;
 };
 
 #endif
