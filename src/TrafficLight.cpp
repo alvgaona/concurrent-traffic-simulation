@@ -30,7 +30,7 @@ TrafficLight::TrafficLight() {
 
 TrafficLight::~TrafficLight() {}
 
-void TrafficLight::wait_for_green() {
+void TrafficLight::WaitForGreen() {
   while (true) {
     std::this_thread::sleep_for(std::chrono::microseconds(1));
 
@@ -41,18 +41,18 @@ void TrafficLight::wait_for_green() {
   }
 }
 
-void TrafficLight::set_current_phase(const TrafficLightPhase phase) {
+void TrafficLight::SetCurrentPhase(const TrafficLightPhase phase) {
   current_phase_ = phase;
 }
 
-TrafficLightPhase TrafficLight::get_current_phase() { return current_phase_; }
+TrafficLightPhase TrafficLight::GetCurrentPhase() { return current_phase_; }
 
-void TrafficLight::simulate() {
-  threads_.emplace_back(std::thread(&TrafficLight::cycle_through_phases, this));
+void TrafficLight::Simulate() {
+  threads_.emplace_back(std::thread(&TrafficLight::CycleThroughPhases, this));
 }
 
 // virtual function which is executed in a thread
-void TrafficLight::cycle_through_phases() {
+void TrafficLight::CycleThroughPhases() {
   std::random_device device;
   std::mt19937 mt_engine(device());
   std::uniform_int_distribution<> distribution(4, 6);

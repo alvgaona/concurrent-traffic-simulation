@@ -13,16 +13,16 @@ public:
     Street();
 
     // getters / setters
-    double get_length() { return length_; }
-    void set_in_intersection(std::shared_ptr<Intersection> in);
-    void set_out_intersection(std::shared_ptr<Intersection> out);
-    std::shared_ptr<Intersection> get_out_intersection() { return inter_out_; }
-    std::shared_ptr<Intersection> get_in_intersection() { return inter_in_; }
+    double GetLength() { return length_; }
+    void SetInIntersection(std::shared_ptr<Intersection> in);
+    void SetOutIntersection(std::shared_ptr<Intersection> out);
+    std::shared_ptr<Intersection> GetOutIntersection() { return inter_out_; }
+    std::shared_ptr<Intersection> GetInIntersection() { return inter_in_; }
 
     // typical behaviour methods
 
     // miscellaneous
-    std::shared_ptr<Street> get_shared_this() { return shared_from_this(); }
+    std::shared_ptr<Street> GetSharedThis() { return shared_from_this(); }
 
 private:
     double length_;                                      // length of this street in m

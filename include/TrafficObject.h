@@ -19,13 +19,13 @@ public:
   ~TrafficObject();
 
   // getter and setter
-  int get_id() { return id_; }
-  void set_position(double x, double y);
-  void get_position(double &x, double &y);
-  ObjectType get_type() { return type_; }
+  int GetId() { return id_; }
+  void SetPosition(double x, double y);
+  void GetPosition(double &x, double &y);
+  ObjectType GetType() { return type_; }
 
   // typical behaviour methods
-  virtual void simulate() {};
+  virtual void Simulate() {};
 
 protected:
   ObjectType type_;                    // identifies the class type

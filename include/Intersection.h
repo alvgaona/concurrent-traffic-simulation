@@ -37,20 +37,20 @@ public:
     Intersection();
 
     // getters / setters
-    void set_is_blocked(bool is_blocked);
+    void SetIsBlocked(bool is_blocked);
 
     // typical behaviour methods
-    void add_vehicles_to_queue(const std::shared_ptr<Vehicle> &vehicle);
-    void add_street(std::shared_ptr<Street> street);
-    std::vector<std::shared_ptr<Street>> query_streets(const std::shared_ptr<Street> & incoming);
-    void simulate() override;
-    void vehicle_has_left(const std::shared_ptr<Vehicle> &vehicle);
-    bool traffic_light_is_green();
+    void AddVehiclesToQueue(const std::shared_ptr<Vehicle> &vehicle);
+    void AddStreet(std::shared_ptr<Street> street);
+    std::vector<std::shared_ptr<Street>> QueryStreets(const std::shared_ptr<Street> &incoming);
+    void Simulate();
+    void VehicleHasLeft(const std::shared_ptr<Vehicle> &vehicle);
+    bool TrafficLightIsGreen();
 
 private:
 
     // typical behaviour methods
-    void process_vechile_queue();
+    void ProcessVehicleQueue();
 
     // private members
     std::vector<std::shared_ptr<Street>> streets_;   // list of all streets connected to this intersection

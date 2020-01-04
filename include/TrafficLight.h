@@ -34,18 +34,18 @@ public:
   TrafficLight(TrafficLight &&source) noexcept = delete;
 
   // getters / setters
-  void set_current_phase(const TrafficLightPhase phase);
+  void SetCurrentPhase(const TrafficLightPhase phase);
 
   // operators overload
   TrafficLight &operator=(TrafficLight const &source) = delete;
   TrafficLight &operator=(TrafficLight &&source) noexcept = delete;
 
-  void simulate();
-  void wait_for_green();
-  TrafficLightPhase get_current_phase();
+  void Simulate();
+  void WaitForGreen();
+  TrafficLightPhase GetCurrentPhase();
 
 private:
-  void cycle_through_phases();
+  void CycleThroughPhases();
 
   std::mutex mutex_;
   TrafficLightPhase current_phase_;

@@ -8,13 +8,13 @@ int TrafficObject::id_count_ = 0;
 
 std::mutex TrafficObject::mutex_;
 
-void TrafficObject::set_position(double x, double y)
+void TrafficObject::SetPosition(double x, double y)
 {
     pos_x_ = x;
     post_y_ = y;
 }
 
-void TrafficObject::get_position(double &x, double &y)
+void TrafficObject::GetPosition(double &x, double &y)
 {
     x = pos_x_;
     y = post_y_;

@@ -5,20 +5,20 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
-void Graphics::simulate()
+void Graphics::Simulate()
 {
-    this->load_background_img();
+    this->LoadBackgroundImage();
     while (true)
     {
         // sleep at every iteration to reduce CPU usage
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
         // update graphics
-        this->draw_traffic_objects();
+        this->DrawTrafficObjects();
     }
 }
 
-void Graphics::load_background_img()
+void Graphics::LoadBackgroundImage()
 {
     // create window
     window_name_ = "Concurrency Traffic Simulation";
@@ -31,7 +31,7 @@ void Graphics::load_background_img()
     images_.push_back(background.clone()); // third element will be the result image for display
 }
 
-void Graphics::draw_traffic_objects()
+void Graphics::DrawTrafficObjects()
 {
     // reset images
     images_.at(1) = images_.at(0).clone();
@@ -41,20 +41,20 @@ void Graphics::draw_traffic_objects()
     for (auto it : traffic_objects_)
     {
         double posx, posy;
-        it->get_position(posx, posy);
+        it->GetPosition(posx, posy);
 
-        if (it->get_type() == ObjectType::kObjectIntersection)
+        if (it->GetType() == ObjectType::kObjectIntersection)
         {
             // cast object type from TrafficObject to Intersection
             std::shared_ptr<Intersection> intersection = std::dynamic_pointer_cast<Intersection>(it);
 
             // set color according to traffic light and draw the intersection as a circle
-            cv::Scalar trafficLightColor = intersection->traffic_light_is_green() ? cv::Scalar(0, 255, 0) : cv::Scalar(0, 0, 255);
+            cv::Scalar trafficLightColor = intersection->TrafficLightIsGreen() ? cv::Scalar(0, 255, 0) : cv::Scalar(0, 0, 255);
             cv::circle(images_.at(1), cv::Point2d(posx, posy), 25, trafficLightColor, -1);
         }
-        else if (it->get_type() == ObjectType::kObjectVehicle)
+        else if (it->GetType() == ObjectType::kObjectVehicle)
         {
-            cv::RNG rng(it->get_id());
+            cv::RNG rng(it->GetId());
             int b = rng.uniform(0, 255);
             int g = rng.uniform(0, 255);
             int r = sqrt(255*255 - g*g - r*r); // ensure that length of color vector is always 255

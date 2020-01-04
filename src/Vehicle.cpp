@@ -13,7 +13,7 @@ Vehicle::Vehicle()
 }
 
 
-void Vehicle::set_current_destination(std::shared_ptr<Intersection> destination)
+void Vehicle::SetCurrentDestination(std::shared_ptr<Intersection> destination)
 {
     // update destination
     current_destination_ = destination;
@@ -22,7 +22,7 @@ void Vehicle::set_current_destination(std::shared_ptr<Intersection> destination)
     position_street_ = 0.0;
 }
 
-void Vehicle::simulate()
+void Vehicle::Simulate()
 {
     // launch drive function in a thread
     threads_.emplace_back(std::thread(&Vehicle::drive, this));
@@ -56,28 +56,28 @@ void Vehicle::drive()
             position_street_ += speed_ * timeSinceLastUpdate / 1000;
 
             // compute completion rate of current street
-            double completion = position_street_ / current_street_->get_length();
+            double completion = position_street_ / current_street_->GetLength();
 
             // compute current pixel position on street based on driving direction
             std::shared_ptr<Intersection> i1, i2;
             i2 = current_destination_;
-            i1 = i2->get_id() == current_street_->get_in_intersection()->get_id() ? current_street_->get_out_intersection() : current_street_->get_in_intersection();
+            i1 = i2->GetId() == current_street_->GetInIntersection()->GetId() ? current_street_->GetOutIntersection() : current_street_->GetInIntersection();
 
             double x1, y1, x2, y2, xv, yv, dx, dy, l;
-            i1->get_position(x1, y1);
-            i2->get_position(x2, y2);
+            i1->GetPosition(x1, y1);
+            i2->GetPosition(x2, y2);
             dx = x2 - x1;
             dy = y2 - y1;
             l = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (x1 - x2));
             xv = x1 + completion * dx; // new position based on line equation in parameter form
             yv = y1 + completion * dy;
-            this->set_position(xv, yv);
+            this->SetPosition(xv, yv);
 
             // check wether halting position in front of destination has been reached
             if (completion >= 0.9 && !hasEnteredIntersection)
             {
                 // request entry to the current intersection (using async)
-                auto ftrEntryGranted = std::async(&Intersection::add_vehicles_to_queue, current_destination_, get_shared_this());
+                auto ftrEntryGranted = std::async(&Intersection::AddVehiclesToQueue, current_destination_, GetSharedThis());
 
                 // wait until entry has been granted
                 ftrEntryGranted.get();
@@ -91,7 +91,7 @@ void Vehicle::drive()
             if (completion >= 1.0 && hasEnteredIntersection)
             {
                 // choose next street and destination
-                std::vector<std::shared_ptr<Street>> streetOptions = current_destination_->query_streets(current_street_);
+                std::vector<std::shared_ptr<Street>> streetOptions = current_destination_->QueryStreets(current_street_);
                 std::shared_ptr<Street> nextStreet;
                 if (streetOptions.size() > 0)
                 {
@@ -108,14 +108,14 @@ void Vehicle::drive()
                 }
                 
                 // pick the one intersection at which the vehicle is currently not
-                std::shared_ptr<Intersection> nextIntersection = nextStreet->get_in_intersection()->get_id() == current_destination_->get_id() ? nextStreet->get_out_intersection() : nextStreet->get_in_intersection();
+                std::shared_ptr<Intersection> nextIntersection = nextStreet->GetInIntersection()->GetId() == current_destination_->GetId() ? nextStreet->GetOutIntersection() : nextStreet->GetInIntersection();
 
                 // send signal to intersection that vehicle has left the intersection
-                current_destination_->vehicle_has_left(get_shared_this());
+                current_destination_->VehicleHasLeft(GetSharedThis());
 
                 // assign new street and destination
-                this->set_current_destination(nextIntersection);
-                this->set_current_street(nextStreet);
+                this->SetCurrentDestination(nextIntersection);
+                this->SetCurrentStreet(nextStreet);
 
                 // reset speed and intersection flag
                 speed_ *= 10.0;

@@ -27,31 +27,31 @@ void createTrafficObjects_Paris(
     }
 
     // position intersections in pixel coordinates (counter-clockwise)
-    intersections.at(0)->set_position(385, 270);
-    intersections.at(1)->set_position(1240, 80);
-    intersections.at(2)->set_position(1625, 75);
-    intersections.at(3)->set_position(2110, 75);
-    intersections.at(4)->set_position(2840, 175);
-    intersections.at(5)->set_position(3070, 680);
-    intersections.at(6)->set_position(2800, 1400);
-    intersections.at(7)->set_position(400, 1100);
-    intersections.at(8)->set_position(1700, 900); // central plaza
+    intersections.at(0)->SetPosition(385, 270);
+    intersections.at(1)->SetPosition(1240, 80);
+    intersections.at(2)->SetPosition(1625, 75);
+    intersections.at(3)->SetPosition(2110, 75);
+    intersections.at(4)->SetPosition(2840, 175);
+    intersections.at(5)->SetPosition(3070, 680);
+    intersections.at(6)->SetPosition(2800, 1400);
+    intersections.at(7)->SetPosition(400, 1100);
+    intersections.at(8)->SetPosition(1700, 900); // central plaza
 
     // create streets and connect traffic objects
     int nStreets = 8;
     for (auto ns = 0; ns < nStreets; ns++)
     {
         streets.push_back(std::make_shared<Street>());
-        streets.at(ns)->set_in_intersection(intersections.at(ns));
-        streets.at(ns)->set_out_intersection(intersections.at(8));
+        streets.at(ns)->SetInIntersection(intersections.at(ns));
+        streets.at(ns)->SetOutIntersection(intersections.at(8));
     }
 
     // add vehicles to streets
     for (auto nv = 0; nv < nVehicles; nv++)
     {
         vehicles.push_back(std::make_shared<Vehicle>());
-        vehicles.at(nv)->set_current_street(streets.at(nv));
-        vehicles.at(nv)->set_current_destination(intersections.at(8));
+        vehicles.at(nv)->SetCurrentStreet(streets.at(nv));
+        vehicles.at(nv)->SetCurrentDestination(intersections.at(8));
     }
 }
 
@@ -69,12 +69,12 @@ void createTrafficObjects_NYC(std::vector<std::shared_ptr<Street>> &streets, std
     }
 
     // position intersections in pixel coordinates
-    intersections.at(0)->set_position(1430, 625);
-    intersections.at(1)->set_position(2575, 1260);
-    intersections.at(2)->set_position(2200, 1950);
-    intersections.at(3)->set_position(1000, 1350);
-    intersections.at(4)->set_position(400, 1000);
-    intersections.at(5)->set_position(750, 250);
+    intersections.at(0)->SetPosition(1430, 625);
+    intersections.at(1)->SetPosition(2575, 1260);
+    intersections.at(2)->SetPosition(2200, 1950);
+    intersections.at(3)->SetPosition(1000, 1350);
+    intersections.at(4)->SetPosition(400, 1000);
+    intersections.at(5)->SetPosition(750, 250);
 
     // create streets and connect traffic objects
     int nStreets = 7;
@@ -83,33 +83,33 @@ void createTrafficObjects_NYC(std::vector<std::shared_ptr<Street>> &streets, std
         streets.push_back(std::make_shared<Street>());
     }
 
-    streets.at(0)->set_in_intersection(intersections.at(0));
-    streets.at(0)->set_out_intersection(intersections.at(1));
+    streets.at(0)->SetInIntersection(intersections.at(0));
+    streets.at(0)->SetOutIntersection(intersections.at(1));
 
-    streets.at(1)->set_in_intersection(intersections.at(1));
-    streets.at(1)->set_out_intersection(intersections.at(2));
+    streets.at(1)->SetInIntersection(intersections.at(1));
+    streets.at(1)->SetOutIntersection(intersections.at(2));
 
-    streets.at(2)->set_in_intersection(intersections.at(2));
-    streets.at(2)->set_out_intersection(intersections.at(3));
+    streets.at(2)->SetInIntersection(intersections.at(2));
+    streets.at(2)->SetOutIntersection(intersections.at(3));
 
-    streets.at(3)->set_in_intersection(intersections.at(3));
-    streets.at(3)->set_out_intersection(intersections.at(4));
+    streets.at(3)->SetInIntersection(intersections.at(3));
+    streets.at(3)->SetOutIntersection(intersections.at(4));
 
-    streets.at(4)->set_in_intersection(intersections.at(4));
-    streets.at(4)->set_out_intersection(intersections.at(5));
+    streets.at(4)->SetInIntersection(intersections.at(4));
+    streets.at(4)->SetOutIntersection(intersections.at(5));
 
-    streets.at(5)->set_in_intersection(intersections.at(5));
-    streets.at(5)->set_out_intersection(intersections.at(0));
+    streets.at(5)->SetInIntersection(intersections.at(5));
+    streets.at(5)->SetOutIntersection(intersections.at(0));
 
-    streets.at(6)->set_in_intersection(intersections.at(0));
-    streets.at(6)->set_out_intersection(intersections.at(3));
+    streets.at(6)->SetInIntersection(intersections.at(0));
+    streets.at(6)->SetOutIntersection(intersections.at(3));
 
     // add vehicles to streets
     for (auto nv = 0; nv < nVehicles; nv++)
     {
         vehicles.push_back(std::make_shared<Vehicle>());
-        vehicles.at(nv)->set_current_street(streets.at(nv));
-        vehicles.at(nv)->set_current_destination(intersections.at(nv));
+        vehicles.at(nv)->SetCurrentStreet(streets.at(nv));
+        vehicles.at(nv)->SetCurrentDestination(intersections.at(nv));
     }
 }
 
@@ -125,16 +125,16 @@ int main()
     int nVehicles = 6;
     createTrafficObjects_Paris(streets, intersections, vehicles, backgroundImg, nVehicles);
 
-    /* PART 2 : simulate traffic objects */
+    /* PART 2 : Simulate traffic objects */
 
-    // simulate intersection
+    // Simulate intersection
     std::for_each(intersections.begin(), intersections.end(), [](std::shared_ptr<Intersection> &i) {
-        i->simulate();
+        i->Simulate();
     });
 
-    // simulate vehicles
+    // Simulate vehicles
     std::for_each(vehicles.begin(), vehicles.end(), [](std::shared_ptr<Vehicle> &v) {
-        v->simulate();
+        v->Simulate();
     });
 
     /* PART 3 : Launch visualization */
@@ -153,7 +153,7 @@ int main()
 
     // draw all objects in vector
     auto graphics = new Graphics();
-    graphics->set_bg_file_name(backgroundImg);
-    graphics->set_traffic_objects(trafficObjects);
-    graphics->simulate();
+    graphics->SetBgFileName(backgroundImg);
+    graphics->SetTrafficObjects(trafficObjects);
+    graphics->Simulate();
 }
