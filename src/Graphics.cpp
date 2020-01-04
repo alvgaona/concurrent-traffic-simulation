@@ -1,9 +1,9 @@
+#include "../include/Graphics.h"
+#include "../include/Intersection.h"
 #include <iostream>
 #include <opencv2/core.hpp>
-#include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
-#include "Graphics.h"
-#include "Intersection.h"
+#include <opencv2/imgproc.hpp>
 
 void Graphics::simulate()
 {

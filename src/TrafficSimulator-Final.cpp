@@ -2,11 +2,10 @@
 #include <thread>
 #include <vector>
 
-#include "Vehicle.h"
-#include "Street.h"
-#include "Intersection.h"
-#include "Graphics.h"
-
+#include "../include/Graphics.h"
+#include "../include/Intersection.h"
+#include "../include/Street.h"
+#include "../include/Vehicle.h"
 
 // Paris
 void createTrafficObjects_Paris(std::vector<std::shared_ptr<Street>> &streets, std::vector<std::shared_ptr<Intersection>> &intersections, std::vector<std::shared_ptr<Vehicle>> &vehicles, std::string &filename, int nVehicles)

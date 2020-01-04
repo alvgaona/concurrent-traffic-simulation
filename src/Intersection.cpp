@@ -4,9 +4,9 @@
 #include <future>
 #include <random>
 
-#include "Street.h"
-#include "Intersection.h"
-#include "Vehicle.h"
+#include "../include/Intersection.h"
+#include "../include/Street.h"
+#include "../include/Vehicle.h"
 
 /* Implementation of class "WaitingVehicles" */
 

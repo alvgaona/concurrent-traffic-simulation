@@ -1,7 +1,7 @@
 #include <iostream>
-#include "Vehicle.h"
-#include "Intersection.h"
-#include "Street.h"
+#include "../include/Vehicle.h"
+#include "../include/Intersection.h"
+#include "../include/Street.h"
 
 
 Street::Street()

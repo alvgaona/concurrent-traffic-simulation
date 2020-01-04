@@ -1,7 +1,7 @@
+#include "../include/TrafficObject.h"
 #include <algorithm>
-#include <iostream>
 #include <chrono>
-#include "TrafficObject.h"
+#include <iostream>
 
 // init static variable
 int TrafficObject::_idCnt = 0;

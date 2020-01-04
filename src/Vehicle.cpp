@@ -1,8 +1,8 @@
+#include "../include/Vehicle.h"
+#include "../include/Intersection.h"
+#include "../include/Street.h"
 #include <iostream>
 #include <random>
-#include "Street.h"
-#include "Intersection.h"
-#include "Vehicle.h"
 
 Vehicle::Vehicle()
 {
